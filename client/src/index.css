@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Enterprise Deep Void Theme */
+  --bg-main: #020203;
+  /* Almost pure black */
+  --bg-secondary: #0a0b10;
+  /* Panel bg */
+  --bg-card: rgba(15, 17, 26, 0.85);
+  --bg-glass: rgba(10, 11, 16, 0.7);
+  --bg-hover: rgba(255, 255, 255, 0.03);
+
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(255, 255, 255, 0.15);
+
+  /* Text - High Contrast */
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+
+  /* Signal Colors */
+  --color-critical: #ff0033;
+  /* Pure Danger Red */
+  --color-high: #ff6600;
+  /* Safety Orange */
+  --color-medium: #ffcc00;
+  /* Caution Yellow */
+  --color-low: #00cc66;
+  /* Good Green */
+  --color-noise: #334155;
+  /* Ignored Slate */
+  --color-accent: #00aaff;
+  /* Tech Blue */
+  --color-purple: #bd34fe;
+  /* AI/Magic */
+
+  /* Spacing - Dense */
+  --spacing-xs: 2px;
+  --spacing-sm: 6px;
+  --spacing-md: 12px;
+  --spacing-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-main);
+  /* Subtle Cyber Grid */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: var(--text-primary);
+  line-height: 1.4;
+  overflow: hidden;
+  font-size: 13px;
+  /* Dense Logic */
+}
+
+code,
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Utilities */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+.border-glow {
+  box-shadow: 0 0 15px -3px var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Animations */
+@keyframes pulse-critical {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 51, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 51, 0);
+  }
+}
+
+@keyframes flash {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-critical {
+  animation: pulse-critical 2s infinite;
+}
+
+.animate-flash {
+  animation: flash 1s infinite;
+}
+
+/* Scrollbar - Thin & Stealth */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Typography Overrides */
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-xs {
+  font-size: 11px;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.text-base {
+  font-size: 13px;
+}
+
+.text-lg {
+  font-size: 15px;
+}
+
+.text-xl {
+  font-size: 18px;
+}
+
+/* Structural */
+.dashboard-grid {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar-area {
+  flex-shrink: 0;
+}
+
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.split-view {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.list-pane {
+  width: 380px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  background: rgba(5, 5, 8, 0.6);
+}
+
+.detail-pane {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #111420 0%, #020203 100%);
+}
