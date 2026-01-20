@@ -2,7 +2,20 @@ const { calculateRiskScore } = require('./riskScoring');
 const { isNoise } = require('./noiseFilter');
 const { generateExplanation } = require('./explainability');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
 
+const DATA_FILE = path.join(__dirname, '../../data/incidents.json');
+
+/**
+ * Correlation Engine (Simulated)
+ * 
+ * INTERVIEW NOTE: strictly speaking, this module currently performs "Intelligent Aggregation"
+ * (grouping similar alerts from the same source) rather than full multi-source "Correlation".
+ * True correlation would link an SSH login on Server A with a Firewall drop on Router B.
+ * 
+ * This engine reduces alert volume and adds context (Risk Scoring).
+ */
 class CorrelationEngine {
     constructor() {
         this.incidents = new Map(); // Key: grouping_hash, Value: Incident Object
@@ -10,6 +23,12 @@ class CorrelationEngine {
         this.processedCount = 0;
         this.reducedCount = 0;
         this.lastHeartbeat = null;
+
+        // Load persisted data on startup
+        this.load();
+
+        // Auto-save every 5 seconds (to avoid blocking on high throughput)
+        setInterval(() => this.save(), 5000);
     }
 
     /**
@@ -32,8 +51,9 @@ class CorrelationEngine {
         const now = Date.now();
         let incident = this.incidents.get(hash);
 
+        // Check if incident exists and is within the active window
         if (incident && (now - incident.lastSeen < this.windowSizeMs)) {
-            // Update existing incident
+            // Update existing incident (Aggregation)
             incident.count++;
             incident.lastSeen = now;
             incident.alerts.push(alert);
@@ -80,7 +100,8 @@ class CorrelationEngine {
         incident.riskBucket = incident.isNoise ? 'NOISE' : riskResult.bucket;
         incident.riskReasons = riskResult.reasons;
 
-        // 3. Explanation & AI Agent
+        // 3. Automated Analysis & Advice (Heuristic Expert System)
+        // Note: Renamed from "AI" to be accurate for interviews.
         const explResult = generateExplanation({
             ruleName: incident.ruleName,
             technique: incident.mitre.id ? incident.mitre.id[0] : null,
@@ -112,6 +133,35 @@ class CorrelationEngine {
         this.processedCount = 0;
         this.reducedCount = 0;
         this.lastHeartbeat = null;
+        this.save();
+    }
+
+    save() {
+        try {
+            const data = {
+                incidents: Array.from(this.incidents.entries()),
+                processedCount: this.processedCount,
+                reducedCount: this.reducedCount
+            };
+            fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+        } catch (e) {
+            console.error("Failed to save incidents:", e.message);
+        }
+    }
+
+    load() {
+        try {
+            if (fs.existsSync(DATA_FILE)) {
+                const raw = fs.readFileSync(DATA_FILE);
+                const data = JSON.parse(raw);
+                this.incidents = new Map(data.incidents || []);
+                this.processedCount = data.processedCount || 0;
+                this.reducedCount = data.reducedCount || 0;
+                console.log(`[Persistence] Loaded ${this.incidents.size} incidents from disk.`);
+            }
+        } catch (e) {
+            console.error("Failed to load incidents:", e.message);
+        }
     }
 }
 

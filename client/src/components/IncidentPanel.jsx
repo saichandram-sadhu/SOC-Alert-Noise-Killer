@@ -86,9 +86,9 @@ const IncidentPanel = ({ incident, onMarkNoise }) => {
                             <div className="p-3 bg-[var(--bg-hover)] border-b border-[var(--border-color)] flex justify-between items-center">
                                 <span className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                                     <Zap size={14} className={riskScore > 70 ? "text-[var(--color-critical)] animate-pulse" : "text-[var(--color-accent)]"} fill="currentColor" />
-                                    AI Threat Analysis
+                                    Automated Analysis
                                 </span>
-                                <span className="mono text-[10px] text-[var(--text-muted)]">CONFIDENCE: 92%</span>
+                                <span className="mono text-[10px] text-[var(--text-muted)]">HEURISTIC ENGINE</span>
                             </div>
                             <div className="p-5">
                                 <p className="text-sm md:text-base leading-relaxed text-[var(--text-primary)]">
