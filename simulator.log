@@ -1,0 +1,7 @@
+
+> simulator@1.0.0 start
+> node generate_alerts.js
+
+Starting simulation: Sending 50 alerts to http://localhost:5000/api/alerts...
+..................................................
+Simulation complete.
